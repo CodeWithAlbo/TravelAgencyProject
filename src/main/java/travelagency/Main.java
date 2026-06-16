@@ -1,6 +1,6 @@
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Main.java to edit this template
  */
 package travelagency;
 
@@ -16,12 +16,12 @@ public class Main {
         ArrayList<Customer> customers = new ArrayList<>();
         ArrayList<PackageTour> packages = new ArrayList<>();
 
-        // 1. automath fortosh data apo to duadiko arxeio 
+        // 1. Aftomati fortwsi dedomenwn apo to duadiko arxeio
         FileManager.loadData(cities, customers, packages);
 
         final double agencyProfitMargin = 25.0;
 
-        // 2. mhxanismos Demo me upostiriksi id 
+        // 2. Mixanismos Demo me ypostirixi IDs
         if (cities.isEmpty() && packages.isEmpty() && customers.isEmpty()) {
             System.out.println("\n[Demo] Dhmiourgia arxikwn antikeimenwn me ID gia thn epideiksh...");
             
@@ -56,7 +56,7 @@ public class Main {
             System.out.println("[Demo] Ta arxika dedomena dhmiourgithikan epitixws!\n");
         }
 
-        // Συγχρονισμός πόλεων από τη MySQL
+        // Sygxronismos polewn apo th MySQL
         try {
             ArrayList<City> dbCities = DBManager.loadCitiesFromDB();
             if (!dbCities.isEmpty()) {
@@ -69,7 +69,7 @@ public class Main {
         int choice = 0;
         while (choice != 6) {
             System.out.println("\n================= VASIKO MENU =================");
-            System.out.println("1) Diaxeirhsh Paketou (Prosthikh me Erwthseis Polewn / Emfanish)");
+            System.out.println("1) Diaxeirhsh Paketou (Prosthikh me Erwthseis / Emfanish / Diagrafh)");
             System.out.println("2) Diaxeirhsh Pelath (CRUD & Epilegmenh Agora Paketou)");
             System.out.println("3) Diaxeirhsh Polhs (Prosthikh me ID / Tropopoihsh / Diagrafh)");
             System.out.println("4) Emfanhsh plithous Pelatwn kai Paketwn");
@@ -83,13 +83,15 @@ public class Main {
                 switch (choice) {
                     case 1: 
                         System.out.println("\n--- DIAXEIRHSH PAKETOU ---");
-                        System.out.println("1. Prosthikh Neou Paketou (Dynamiki Epilogh Polewn)\n2. Provolh olwn twn paketwn");
+                        System.out.println("1. Prosthikh Neou Paketou (Dynamiki Epilogh Polewn)");
+                        System.out.println("2. Provolh olwn twn paketwn");
+                        System.out.println("3. Diagrafh Paketou (Delete)");
                         System.out.print("Epilogh: ");
                         int pChoice = Integer.parseInt(scanner.nextLine());
                         
                         if (pChoice == 1) {
                             if (cities.isEmpty()) {
-                                System.out.println("Sfalma: Den yparxoun poleis sto systhma! Prosthiste prwta poleis apo to Menu 3.");
+                                System.out.println("Sfalma: Den yparxoun poleis! Prosthiste prwta poleis apo to Menu 3.");
                                 break;
                             }
                             System.out.print("Eisagete Kwdiko (ID) Paketou: ");
@@ -99,7 +101,6 @@ public class Main {
                             
                             PackageTour p = new PackageTour(id, name, agencyProfitMargin);
                             
-                            // erwthseis gia eisagwgh polewn sto paketo 
                             System.out.println("\n--- EROTHSEIS DIADROMHS ---");
                             while (true) {
                                 System.out.println("Diathesimes Poleis:");
@@ -122,7 +123,7 @@ public class Main {
                                     System.out.print("Eisagete arithmo dianukterefsewn gia thn polh " + selectedCity.getName() + ": ");
                                     int numNights = Integer.parseInt(scanner.nextLine());
                                     p.addCity(selectedCity, numNights);
-                                    System.out.println("• H polh prostethike sto paketo!");
+                                    System.out.println(" H polh prostethike!");
                                 } else {
                                     System.out.println("Sfalma: Den vrethike polh me ayto to ID!");
                                 }
@@ -130,7 +131,7 @@ public class Main {
                             }
                             
                             packages.add(p);
-                            System.out.println("To touristiko paketo '" + name + "' ftiachtike epitixws!");
+                            System.out.println("To touristiko paketo '" + name + "' ftiaxtike epitixws!");
                         } else if (pChoice == 2) {
                             if (packages.isEmpty()) {
                                 System.out.println("Den uparxoun kataxwrhmena paketa.");
@@ -138,6 +139,27 @@ public class Main {
                                 for (PackageTour p : packages) {
                                     p.printPackage();
                                 }
+                            }
+                        } else if (pChoice == 3) {
+                            if (packages.isEmpty()) {
+                                System.out.println("Den uparxoun paketa gia diagrafh.");
+                                break;
+                            }
+                            System.out.print("Eisagete to ID tou paketou pou thelete na diagrapsete: ");
+                            int idToDelete = Integer.parseInt(scanner.nextLine());
+                            
+                            boolean found = false;
+                            for (int i = 0; i < packages.size(); i++) {
+                                if (packages.get(i).getId() == idToDelete) {
+                                    String removedName = packages.get(i).getName();
+                                    packages.remove(i);
+                                    System.out.println("️ To paketo '" + removedName + "' (ID: " + idToDelete + ") diagrafhke epitixws!");
+                                    found = true;
+                                    break;
+                                }
+                            }
+                            if (!found) {
+                                System.out.println("Sfalma: Den vrethike paketo me ayto to ID!");
                             }
                         }
                         break;
@@ -156,7 +178,7 @@ public class Main {
                             
                             DBManager.insertCustomer(custId, custName);
                             customers.add(new Customer(custId, custName));
-                            System.out.println("O pelaths apothikeftike epituxws!");
+                            System.out.println("O pelaths apothikeftike!");
                         } else if (cChoice == 2) {
                             System.out.print("Eisagete ID Pelath: ");
                             String custId = scanner.nextLine();
@@ -171,7 +193,7 @@ public class Main {
                                     break;
                                 }
                             }
-                            System.out.println("Ta stoixeia tou pelath enimerothikan!");
+                            System.out.println("Ta stoixeia enimerothikan!");
                         } else if (cChoice == 3) {
                             System.out.print("Eisagete ID Pelath: ");
                             String custId = scanner.nextLine();
@@ -184,7 +206,7 @@ public class Main {
                                 break;
                             }
                             
-                            System.out.println("\n--- Epilegste Pelath ---");
+                            System.out.println("\n--- Epilekste Pelath ---");
                             for (int i = 0; i < customers.size(); i++) {
                                 System.out.println("[" + i + "] ID: " + customers.get(i).getId() + " - Onoma: " + customers.get(i).getName());
                             }
@@ -193,7 +215,7 @@ public class Main {
                             
                             System.out.println("\n--- Epilegste Paketo ---");
                             for (int i = 0; i < packages.size(); i++) {
-                                System.out.println("[" + i + "] " + packages.get(i).getName() + " (" + packages.get(i).getPrice() + "€)");
+                                System.out.println("[" + i + "] " + packages.get(i).getName() + " (" + packages.get(i).getPrice() + "$)");
                             }
                             System.out.print("Eisagete ton arithmo tou paketou: ");
                             int packageIndex = Integer.parseInt(scanner.nextLine());
@@ -203,10 +225,10 @@ public class Main {
                                 PackageTour selectedPackage = packages.get(packageIndex);
                                 
                                 selectedCustomer.buyPackage(selectedPackage);
-                                System.out.println("\n🎉 O pelaths '" + selectedCustomer.getName() + "' agorase epitixws to paketo '" + selectedPackage.getName() + "'!");
+                                System.out.println("\n🎉 O pelaths '" + selectedCustomer.getName() + "' agorase to paketo '" + selectedPackage.getName() + "'!");
                                 selectedCustomer.printPackages();
                             } else {
-                                System.out.println("Sfalma: Mh egkurh epilogh pelath h paketou!");
+                                System.out.println("Sfalma: Mh egkurh epilogh!");
                             }
                         }
                         break;
@@ -222,7 +244,7 @@ public class Main {
 
                         if (cityChoice == 1) {
                             System.out.print("Eisagete ID Polhs (Arithmo): ");
-                            int cityId = Integer.parseInt(scanner.nextLine()); //erwthsh gia to id ths polhs 
+                            int cityId = Integer.parseInt(scanner.nextLine());
                             System.out.print("Eisagete Kostos Dianukterefshs: ");
                             double cityCost = Double.parseDouble(scanner.nextLine());
                             
@@ -242,7 +264,7 @@ public class Main {
                                     break;
                                 }
                             }
-                            System.out.println("To kostos ths polhs enimerothike!");
+                            System.out.println("To kostos enimerothike!");
                         } else if (cityChoice == 3) {
                             DBManager.deleteCity(cityName);
                             cities.removeIf(c -> c.getName().equalsIgnoreCase(cityName));
@@ -251,20 +273,44 @@ public class Main {
                         break;
 
                     case 4: 
-                        System.out.println("\n--- STATISTIKA STOIXEIA PRAKTOREIOU ---");
+                        System.out.println("\n--- STATISTIKA STOIXEIA ---");
                         System.out.println("Sunolikos Arithmos Pelatwn: " + customers.size());
                         System.out.println("Sunolikos Arithmos Touristikwn Paketwn: " + packages.size());
                         break;
 
-                    case 5: 
-                        System.out.println("\n--- OIKONOMIKA STOIXEIA ---");
-                        double totalAgencyProfit = 0;
-                        for (Customer c : customers) {
-                            for (PackageTour p : c.getPurchasedPackages()) {
-                                totalAgencyProfit += (p.getPrice() - p.getCost());
-                            }
+                    case 5: // Ypologismos & Emfanisi kerdous ana epileptheis paketo
+                        System.out.println("\n--- OIKONOMIKA STOIXEIA PAKETOU ---");
+                        if (packages.isEmpty()) {
+                            System.out.println("Den uparxoun kataxwrhmena paketa sto susthma.");
+                            break;
                         }
-                        System.out.println("Sunoliko Kerdos Praktoreiou: " + totalAgencyProfit + "€");
+                        
+                        // Εμφάνιση λίστας με τα διαθέσιμα πακέτα
+                        System.out.println("Epilegste to paketo pou thelete na thurwrisete:");
+                        for (int i = 0; i < packages.size(); i++) {
+                            System.out.println("[" + i + "] " + packages.get(i).getName() + " (ID: " + packages.get(i).getId() + ")");
+                        }
+                        
+                        System.out.print("Eisagete ton arithmo tou paketou: ");
+                        int selectedPackIndex = Integer.parseInt(scanner.nextLine());
+                        
+                        // Έλεγχος εγκυρότητας της επιλογής
+                        if (selectedPackIndex >= 0 && selectedPackIndex < packages.size()) {
+                            PackageTour targetPackage = packages.get(selectedPackIndex);
+                            
+                            double cost = targetPackage.getCost();
+                            double price = targetPackage.getPrice();
+                            double profit = price - cost; // Το κέρδος του γραφείου
+                            
+                            System.out.println("\n========================================");
+                            System.out.println("Analysei Stoixeiwn gia to Paketo: " + targetPackage.getName());
+                            System.out.println("-> Katharo Kostos (Diamones & Metakiniseis): " + cost + "$");
+                            System.out.println("-> Katharo Kerdos Praktoreiou (25%): " + profit + "$");
+                            System.out.println("-> Teliki Timi Pwlhshs ston Pelath: " + price + "$");
+                            System.out.println("========================================");
+                        } else {
+                            System.out.println("Sfalma: Mh egkurh epilogh paketou!");
+                        }
                         break;
 
                     case 6: 
@@ -277,7 +323,7 @@ public class Main {
                         System.out.println("Mh egkurh epilogh!");
                 }
             } catch (NumberFormatException e) {
-                System.out.println("[Sfalma] Mh egkurh morfh! Parakalw eisagete arithmo.");
+                System.out.println("[Sfalma] Parakalw eisagete arithmo.");
             } catch (SQLException e) {
                 System.out.println("[Sfalma SQL] Provlhma sth MySQL: " + e.getMessage());
             } catch (Exception e) {
