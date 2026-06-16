@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package travelagency;
 
 import java.io.File;
@@ -15,7 +11,6 @@ import java.util.ArrayList;
 public class FileManager {
     private static final String FILE_NAME = "agency_data.dat";
 
-    // Apothikefsi olwn twn dedomenwn se duadiko arxeio
     public static void saveData(ArrayList<City> cities, ArrayList<Customer> customers, ArrayList<PackageTour> packages) {
         try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(FILE_NAME))) {
             oos.writeObject(cities);
@@ -27,7 +22,6 @@ public class FileManager {
         }
     }
 
-    // Fortwsh olwn twn dedomenwn apo to duadiko arxeio 
     @SuppressWarnings("unchecked")
     public static void loadData(ArrayList<City> cities, ArrayList<Customer> customers, ArrayList<PackageTour> packages) {
         File file = new File(FILE_NAME);
