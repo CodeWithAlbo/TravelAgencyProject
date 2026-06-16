@@ -23,7 +23,7 @@ public class DBManager {
         return DriverManager.getConnection(URL, USER, PASSWORD);
     }
 
-    // nea methodos: fortosh polewn apo thn MySQL me ta id tous
+    // fotosh poleon apo th MySQL me ta id tous
     public static ArrayList<City> loadCitiesFromDB() throws SQLException {
         ArrayList<City> list = new ArrayList<>();
         String sql = "SELECT * FROM cities";
@@ -37,7 +37,7 @@ public class DBManager {
         return list;
     }
 
-    // tropopoihmeno INSERT gia upostiriksi id
+    // INSERT gia ipostiriksi id
     public static void insertCity(int id, String name, double cost) throws SQLException {
         String sql = "INSERT INTO cities (id, name, cost_per_night) VALUES (?, ?, ?)";
         try (Connection conn = getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -60,7 +60,7 @@ public class DBManager {
     public static void deleteCity(String name) throws SQLException {
         String sql = "DELETE FROM cities WHERE name = ?";
         try (Connection conn = getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            pstmt.setString(1, name);
+            pstmt.setString(1, name); 
             pstmt.executeUpdate();
         }
     }
