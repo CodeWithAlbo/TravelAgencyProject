@@ -9,27 +9,31 @@ import java.io.Serializable;
 public class City implements Serializable {
     private static final long serialVersionUID = 1L;
     
+    private int id; //neo pedio ID
     private String name;
     private double costPerNight;
 
-    // arxikopoihsh me olh th plhroforia
-    public City(String name, double costPerNight) {
+    // enhmeromenos Constructor
+    public City(int id, String name, double costPerNight) {
+        this.id = id;
         this.name = name;
         this.costPerNight = costPerNight;
     }
 
-    // anaktisi onomatos
+    public int getId() { // nea method getter gia to id
+        return this.id;
+    }
+
     public String getName() {
         return this.name;
     }
 
-    // anaktisi kostous dianikterefsis
     public double getCost() {
         return this.costPerNight;
     }
 
     @Override
     public String toString() {
-        return "City : " + name + " (" + costPerNight + "€/night)";
+        return "ID: " + id + " | Πόλη: " + name + " (" + costPerNight + "€/night)"; //allagh sto method to string gia na tupwnetai to id sthn othonh 
     }
 }
