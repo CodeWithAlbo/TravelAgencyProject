@@ -7,7 +7,10 @@ package travelagency;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
 
 public class DBManager {
     // Stoixeia sindeshs me to data base XAMPP MySQL
@@ -20,12 +23,27 @@ public class DBManager {
         return DriverManager.getConnection(URL, USER, PASSWORD);
     }
 
-    // --- CRUD gia poleis ---
-    public static void insertCity(String name, double cost) throws SQLException {
-        String sql = "INSERT INTO cities (name, cost_per_night) VALUES (?, ?)";
+    // nea methodos: fortosh polewn apo thn MySQL me ta id tous
+    public static ArrayList<City> loadCitiesFromDB() throws SQLException {
+        ArrayList<City> list = new ArrayList<>();
+        String sql = "SELECT * FROM cities";
+        try (Connection conn = getConnection();
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(sql)) {
+            while (rs.next()) {
+                list.add(new City(rs.getInt("id"), rs.getString("name"), rs.getDouble("cost_per_night")));
+            }
+        }
+        return list;
+    }
+
+    // tropopoihmeno INSERT gia upostiriksi id
+    public static void insertCity(int id, String name, double cost) throws SQLException {
+        String sql = "INSERT INTO cities (id, name, cost_per_night) VALUES (?, ?, ?)";
         try (Connection conn = getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            pstmt.setString(1, name);
-            pstmt.setDouble(2, cost);
+            pstmt.setInt(1, id);
+            pstmt.setString(2, name);
+            pstmt.setDouble(3, cost);
             pstmt.executeUpdate();
         }
     }
