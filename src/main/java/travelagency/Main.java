@@ -10,7 +10,7 @@ import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
-        // Arxikopoihsh ths Scanner gia thn eisodo dedomenwn apo thn konsova
+        // Arxikopoihsh ths Scanner gia thn eisodo dedomenwn apo thn konsola
         Scanner scanner = new Scanner(System.nanoTime() > 0 ? System.in : null);
         
         // Dynamic arrays (ArrayLists) gia th dynamic diaxeirish antikeimenwn sth mnhmh (Runtime)
