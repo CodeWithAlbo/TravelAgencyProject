@@ -13,7 +13,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 
 public class DBManager {
-    // Stoixeia sindeshs me to data base XAMPP MySQL
+    // Stoixeia sindeshs me to database XAMPP MySQL
     private static final String URL = "jdbc:mysql://localhost:3306/travel_agency_db?useSSL=false&allowPublicKeyRetrieval=true";
     private static final String USER = "root";
     private static final String PASSWORD = "";
@@ -23,7 +23,7 @@ public class DBManager {
         return DriverManager.getConnection(URL, USER, PASSWORD);
     }
 
-    // fotosh poleon apo th MySQL me ta id tous
+    // Fortwsh polewn apo th MySQL me ta ID tous
     public static ArrayList<City> loadCitiesFromDB() throws SQLException {
         ArrayList<City> list = new ArrayList<>();
         String sql = "SELECT * FROM cities";
@@ -37,7 +37,7 @@ public class DBManager {
         return list;
     }
 
-    // INSERT gia ipostiriksi id
+    // INSERT gia yposthri3h ID stis poleis
     public static void insertCity(int id, String name, double cost) throws SQLException {
         String sql = "INSERT INTO cities (id, name, cost_per_night) VALUES (?, ?, ?)";
         try (Connection conn = getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -60,7 +60,7 @@ public class DBManager {
     public static void deleteCity(String name) throws SQLException {
         String sql = "DELETE FROM cities WHERE name = ?";
         try (Connection conn = getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            pstmt.setString(1, name); 
+            pstmt.setString(1, name); // Diorthwthike o deikths se 1 gia na mhn vgazei Index Out Of Bounds
             pstmt.executeUpdate();
         }
     }
@@ -88,6 +88,17 @@ public class DBManager {
         String sql = "DELETE FROM customers WHERE id = ?";
         try (Connection conn = getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setString(1, id);
+            pstmt.executeUpdate();
+        }
+    }
+
+    // --- KAINOURGIA METHODOS: Apothikefsh stoixeiwn tou paketou sth MySQL ---
+    public static void insertPackage(int id, String name, double profitPercentage) throws SQLException {
+        String sql = "INSERT INTO packages (id, name, profit_percentage) VALUES (?, ?, ?)";
+        try (Connection conn = getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setInt(1, id);
+            pstmt.setString(2, name);
+            pstmt.setDouble(3, profitPercentage);
             pstmt.executeUpdate();
         }
     }
