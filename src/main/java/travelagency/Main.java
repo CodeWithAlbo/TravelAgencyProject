@@ -10,7 +10,7 @@ import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
-        // Arxikopoihsh ths Scanner gia thn eisodo dedomenwn apo thn konsola
+        // Arxikopoihsh ths Scanner gia thn eisodo dedomenwn apo thn konsova
         Scanner scanner = new Scanner(System.nanoTime() > 0 ? System.in : null);
         
         // Dynamic arrays (ArrayLists) gia th dynamic diaxeirish antikeimenwn sth mnhmh (Runtime)
@@ -121,7 +121,7 @@ public class Main {
                                 int targetId = Integer.parseInt(scanner.nextLine());
                                 if (targetId == 0) break; // Eksodos apo th dynamic prosthikh polewn
                                 
-                                // Binary-style sequential scan loop gia na vrethei h polh me to targetId
+                                // Sequential scan loop gia na vrethei h polh me to targetId
                                 City selectedCity = null;
                                 for (City c : cities) {
                                     if (c.getId() == targetId) {
@@ -135,12 +135,15 @@ public class Main {
                                     System.out.print("Eisagete arithmo dianukterefsewn gia thn polh " + selectedCity.getName() + ": ");
                                     int numNights = Integer.parseInt(scanner.nextLine());
                                     p.addCity(selectedCity, numNights);
-                                    System.out.println("- H polh prostethike!"); // DIORThWThIKE: Allakse to romvaki se pavla
+                                    System.out.println("- H polh prostethike!"); 
                                 } else {
                                     System.out.println("Sfalma: Den vrethike polh me ayto to ID!");
                                 }
                                 System.out.println("----------------------------------------");
                             }
+                            
+                            // SYNDESH ME MYSQL: Grafei ta stoixeia kai sto neo pinakaki ths vasis data
+                            DBManager.insertPackage(id, name, agencyProfitMargin);
                             
                             packages.add(p);
                             System.out.println("To touristiko paketo '" + name + "' ftiaxtike epitixws!");
@@ -166,7 +169,7 @@ public class Main {
                                 if (packages.get(i).getId() == idToDelete) {
                                     String removedName = packages.get(i).getName();
                                     packages.remove(i); // Diagrafh apo th runtime arraylist ths Java
-                                    System.out.println("- To paketo '" + removedName + "' (ID: " + idToDelete + ") diagrafhke epitixws!"); // DIORThWThIKE: Greeklish
+                                    System.out.println("- To paketo '" + removedName + "' (ID: " + idToDelete + ") diagrafhke epitixws!"); 
                                     found = true;
                                     break;
                                 }
@@ -177,7 +180,7 @@ public class Main {
                         }
                         break;
 
-                    case 2: // diaxeirisi pelath(CRUD & INTERACTIVE SYSTEM DESIGN)
+                    case 2: // --- DIAXEIRHSH PELATH (CRUD & INTERACTIVE SYSTEM DESIGN) ---
                         System.out.println("\n--- DIAXEIRHSH PELATH ---");
                         System.out.println("1. Prosthikh Pelath (Create)\n2. Tropopoihsh Pelath (Update)\n3. Diagrafh Pelath (Delete)\n4. KATAXORHSH AGORAS (Epilogh Pelath & Paketou)");
                         System.out.print("Epilogh: ");
@@ -219,7 +222,7 @@ public class Main {
                                 break;
                             }
                             
-                            // 1. Ektypwsh dynamic pinaka pelatwn mazi me to index tous gia na epileksei o xrhsths
+                            // 1. Ektypwsh dynamic pinaka pelatwn mazi me το index tous gia na epileksei ο xrhsths
                             System.out.println("\n--- Epilegste Pelath ---");
                             for (int i = 0; i < customers.size(); i++) {
                                 System.out.println("[" + i + "] ID: " + customers.get(i).getId() + " - Onoma: " + customers.get(i).getName());
@@ -227,7 +230,7 @@ public class Main {
                             System.out.print("Eisagete ton arithmo tou pelath: ");
                             int customerIndex = Integer.parseInt(scanner.nextLine());
                             
-                            // 2. Ektypwsh dynamic pinaka paketwn mazi me to index twn antikeimenwn
+                            // 2. Ektypwsh dynamic pinaka paketwn mazi me το index twn antikeimenwn
                             System.out.println("\n--- Epilegste Paketo ---");
                             for (int i = 0; i < packages.size(); i++) {
                                 System.out.println("[" + i + "] " + packages.get(i).getName() + " (" + packages.get(i).getPrice() + "$)");
@@ -249,7 +252,7 @@ public class Main {
                         }
                         break;
 
-                    case 3: //diaxeirhsh polhs (CRUD sth MYSQL me ipostiriksi id
+                    case 3: // --- DIAXEIRHSH POLHS (CRUD STH MYSQL ME YPOSTHRI3H ID) ---
                         System.out.println("\n--- DIAXEIRHSH POLHS ---");
                         System.out.println("1. Prosthikh Polhs (me ID)\n2. Tropopoihsh kostous polhs\n3. Diagrafh polhs");
                         System.out.print("Epilogh: ");
@@ -310,11 +313,11 @@ public class Main {
                         System.out.print("Eisagete ton arithmo tou paketou: ");
                         int selectedPackIndex = Integer.parseInt(scanner.nextLine());
                         
-                        // Business calculation algorithms mesw twn dynamic encapsulation methods
+                        // Business calculation algorithms mesw twn dynamic encapsulation encapsulation methods
                         if (selectedPackIndex >= 0 && selectedPackIndex < packages.size()) {
                             PackageTour targetPackage = packages.get(selectedPackIndex);
                             
-                            double cost = targetPackage.getCost(); // Klhsh dynamic algorithmou gia to sunoliko katharo kostos
+                            double cost = targetPackage.getCost(); // Klhsh dynamic algorithmou gia το sunoliko katharo kostos
                             double price = targetPackage.getPrice(); // Klhsh algorithmou gia timh pwlhshs me profit percentage
                             double profit = price - cost; // Business profit equation execution
                             
@@ -331,7 +334,7 @@ public class Main {
 
                     case 6: // --- APOTHIKEFSH (SERIALIZATION DATA PERSISTENCE) & SYSTEM EXIT ---
                         System.out.println("\nTermatismos efarmoghs... Ginetai apothikefsh dedomenwn.");
-                        // Klhsh ObjectOutputStream streams gia na sosoume olo to runtime object graph sto arxeio
+                        // Klhsh ObjectOutputStream streams gia na sosoume olo το runtime object graph στο arxeio
                         FileManager.saveData(cities, customers, packages);
                         System.out.println("Adios!");
                         break;
@@ -343,7 +346,7 @@ public class Main {
                 // Catch handler gia alphanumeric exceptions otan h scanner perimenei int data parsing
                 System.out.println("[Sfalma] Parakalw eisagete arithmo.");
             } catch (SQLException e) {
-                // Catch handler gia exceptions kata to database connectivity execute status
+                // Catch handler gia exceptions kata το database connectivity execute status
                 System.out.println("[Sfalma SQL] Provlhma sth MySQL: " + e.getMessage());
             } catch (Exception e) {
                 // Generic safety fallback handler preventer gia na mhn krasarei pote h konsola
