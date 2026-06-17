@@ -1,42 +1,63 @@
 package travelagency;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class FileManager {
-    private static final String FILE_NAME = "agency_data.dat";
+public class PackageTour implements Serializable {
+    private static final long serialVersionUID = 1L;
+    
+    private int id;
+    private String name;
+    private ArrayList<City> cities = new ArrayList<>(); 
+    private ArrayList<Integer> nights = new ArrayList<>(); 
+    private ArrayList<Travel> travels = new ArrayList<>(); 
+    private double profitPercentage;
 
-    public static void saveData(ArrayList<City> cities, ArrayList<Customer> customers, ArrayList<PackageTour> packages) {
-        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(FILE_NAME))) {
-            oos.writeObject(cities);
-            oos.writeObject(customers);
-            oos.writeObject(packages);
-            System.out.println("[Susthma Arxeiwn] Ta dedomena apothikeftikan epitixws sto arxeio " + FILE_NAME);
-        } catch (IOException e) {
-            System.out.println("[Sfalma Arxeiou] Apotuxia Apothikefshs: " + e.getMessage());
-        }
+    public PackageTour(int id, String name, double profitPercentage) {
+        this.id = id;
+        this.name = name;
+        this.profitPercentage = profitPercentage;
     }
 
-    @SuppressWarnings("unchecked")
-    public static void loadData(ArrayList<City> cities, ArrayList<Customer> customers, ArrayList<PackageTour> packages) {
-        File file = new File(FILE_NAME);
-        if (!file.exists()) {
-            System.out.println("[Susthma Arxeiwn] Den vrethike prohgoumeno arxeio dedomenwn. Ksekiname me kenes listes.");
-            return;
-        }
+    public int getId() { return this.id; }
+    public String getName() { return this.name; }
+    public double getProfitPercentage() { return this.profitPercentage; }
 
-        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(file))) {
-            cities.addAll((ArrayList<City>) ois.readObject());
-            customers.addAll((ArrayList<Customer>) ois.readObject());
-            packages.addAll((ArrayList<PackageTour>) ois.readObject());
-            System.out.println("[Susthma Arxeiwn] Ta dedomena fortwthikan epitixws apo to arxeio!");
-        } catch (IOException | ClassNotFoundException e) {
-            System.out.println("[Sfalma Arxeiou] Apotuxia anagnwshs arxeiou: " + e.getMessage());
+    public void addCity(City city, int numNights) {
+        this.cities.add(city);
+        this.nights.add(numNights);
+    }
+
+    public void addTravel(Travel travel) {
+        this.travels.add(travel);
+    }
+
+    public double getCost() {
+        double total = 0;
+        for (int i = 0; i < cities.size(); i++) {
+            total += cities.get(i).getCost() * nights.get(i);
         }
+        for (Travel t : travels) {
+            total += t.getMovingCost();
+        }
+        return total;
+    }
+
+    public double getPrice() {
+        return this.getCost() * (1 + this.profitPercentage / 100);
+    }
+
+    public void printPackage() {
+        System.out.println("=== Touristiko paketo: " + name + " (ID: " + id + ") ===");
+        System.out.println("Diadromh & Diamones:");
+        for (int i = 0; i < cities.size(); i++) {
+            System.out.println(" - " + cities.get(i).getName() + " -> Dianukterefseis: " + nights.get(i));
+        }
+        System.out.println("Sundeseis metakinhshs:");
+        for (Travel t : travels) {
+            t.print(); 
+        }
+        System.out.println("Kostos Paketou: " + getCost() + "$ | Timh pwlhshs: " + getPrice() + "$");
+        System.out.println("----------------------------------------");
     }
 }
