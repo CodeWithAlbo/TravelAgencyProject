@@ -1,63 +1,48 @@
 package travelagency;
 
-import java.io.Serializable;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 
-public class PackageTour implements Serializable {
-    private static final long serialVersionUID = 1L;
-    
-    private int id;
-    private String name;
-    private ArrayList<City> cities = new ArrayList<>(); 
-    private ArrayList<Integer> nights = new ArrayList<>(); 
-    private ArrayList<Travel> travels = new ArrayList<>(); 
-    private double profitPercentage;
+public class FileManager {
+    private static final String FILE_NAME = "agency_data.dat";
 
-    public PackageTour(int id, String name, double profitPercentage) {
-        this.id = id;
-        this.name = name;
-        this.profitPercentage = profitPercentage;
-    }
-
-    public int getId() { return this.id; }
-    public String getName() { return this.name; }
-    public double getProfitPercentage() { return this.profitPercentage; }
-
-    public void addCity(City city, int numNights) {
-        this.cities.add(city);
-        this.nights.add(numNights);
-    }
-
-    public void addTravel(Travel travel) {
-        this.travels.add(travel);
-    }
-
-    public double getCost() {
-        double total = 0;
-        for (int i = 0; i < cities.size(); i++) {
-            total += cities.get(i).getCost() * nights.get(i);
+    // Methodos gia thn apothikefsh των dynamic listwn sth mnhmh (Serialization)
+    public static void saveData(ArrayList<City> cities, ArrayList<Customer> customers, ArrayList<PackageTour> packages) {
+        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(FILE_NAME))) {
+            oos.writeObject(cities);
+            oos.writeObject(customers);
+            oos.writeObject(packages);
+            System.out.println("[File System] Ta dedomena apothikeftikan epitixws sto " + FILE_NAME);
+        } catch (Exception e) {
+            System.out.println("[File Error] Sfalma kata thn apothikefsh: " + e.getMessage());
         }
-        for (Travel t : travels) {
-            total += t.getMovingCost();
-        }
-        return total;
     }
 
-    public double getPrice() {
-        return this.getCost() * (1 + this.profitPercentage / 100);
-    }
+    // Methodos gia thn automath fortosh twn dedomenon kata thn ekinnhsh (Deserialization)
+    @SuppressWarnings("unchecked")
+    public static void loadData(ArrayList<City> cities, ArrayList<Customer> customers, ArrayList<PackageTour> packages) {
+        File file = new File(FILE_NAME);
+        if (!file.exists()) {
+            System.out.println("[File System] To arxeio " + FILE_NAME + " den vrethike. Ginetai arxikopoihsh...");
+            return;
+        }
 
-    public void printPackage() {
-        System.out.println("=== Touristiko paketo: " + name + " (ID: " + id + ") ===");
-        System.out.println("Diadromh & Diamones:");
-        for (int i = 0; i < cities.size(); i++) {
-            System.out.println(" - " + cities.get(i).getName() + " -> Dianukterefseis: " + nights.get(i));
+        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(file))) {
+            ArrayList<City> loadedCities = (ArrayList<City>) ois.readObject();
+            ArrayList<Customer> loadedCustomers = (ArrayList<Customer>) ois.readObject();
+            ArrayList<PackageTour> loadedPackages = (ArrayList<PackageTour>) ois.readObject();
+
+            cities.addAll(loadedCities);
+            customers.addAll(loadedCustomers);
+            packages.addAll(loadedPackages);
+
+            System.out.println("[File System] Fortwsh dedomenwn epitixhs! (Poleis: " + cities.size() + ", Pelates: " + customers.size() + ", Paketa: " + packages.size() + ")");
+        } catch (Exception e) {
+            System.out.println("[File Error] Sfalma kata th fortwsh: " + e.getMessage());
         }
-        System.out.println("Sundeseis metakinhshs:");
-        for (Travel t : travels) {
-            t.print(); 
-        }
-        System.out.println("Kostos Paketou: " + getCost() + "$ | Timh pwlhshs: " + getPrice() + "$");
-        System.out.println("----------------------------------------");
     }
 }
